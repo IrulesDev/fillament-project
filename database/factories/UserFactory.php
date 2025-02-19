@@ -23,9 +23,25 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+
+        $name = fake()->name();
+        $nameEmail = str_replace(' ', '', $name);
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $name,
+            'gender',
+            'date_of_birth' => fake()->date(),
+            'phone' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'generation'=> fake()->numberBetween(1,10),
+            'entry_date' => fake()->date(),
+            'graduation_date' => fake()->date(),
+            'status_graduate' => fake()->randomElement(['graduated', 'not_gratduated']),
+            'role' => fake()->randomElement(['admin', 'teacher', 'student']),
+            // 'class_id',
+            // $table->foreignId('department_id')->references('id')->on('departments')->onDelete('cascade');
+            // $table->foreignId('education_id')->references('id')->on('education_stages')->onDelete('cascade');
+            'email' => $nameEmail . '@gmail.com',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),

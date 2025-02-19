@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Atendance extends Model
+{
+    /** @use HasFactory<\Database\Factories\AtendanceFactory> */
+    use HasFactory;
+
+    protected $fillable = [
+        'santri_id',
+        'actifty_id',
+        'actifty',
+        'status',
+        'date'
+    ];
+
+    public function activites(){
+        return $this->belongsTo(activities::class);
+    }
+
+    public function santri(){
+        return $this->belongsTo(User::class);
+    }
+}
