@@ -12,7 +12,7 @@ class assessment extends Model
 
     protected $fillable = [
         'user_id',
-        'leason_id',
+        'lesson_id',
         'score',
         'evaluation',
         'date'

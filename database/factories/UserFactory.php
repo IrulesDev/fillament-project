@@ -29,7 +29,7 @@ class UserFactory extends Factory
 
         return [
             'name' => $name,
-            'gender',
+            'gender'=> fake()->randomElement(['pria', 'wanita']),
             'date_of_birth' => fake()->date(),
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
@@ -38,9 +38,9 @@ class UserFactory extends Factory
             'graduation_date' => fake()->date(),
             'status_graduate' => fake()->randomElement(['graduated', 'not_gratduated']),
             'role' => fake()->randomElement(['admin', 'teacher', 'student']),
-            // 'class_id',
-            // $table->foreignId('department_id')->references('id')->on('departments')->onDelete('cascade');
-            // $table->foreignId('education_id')->references('id')->on('education_stages')->onDelete('cascade');
+            // 'kelas_id',
+            // 'department_id',
+            // 'education_id',
             'email' => $nameEmail . '@gmail.com',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

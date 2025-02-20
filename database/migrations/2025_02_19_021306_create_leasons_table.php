@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('leasons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('kelas_santri_id');
+            $table->unsignedBigInteger('kelas_santri_id')->nullable();
             $table->text('description');
             $table->timestamps();
         });

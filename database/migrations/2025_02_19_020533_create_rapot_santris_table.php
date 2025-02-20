@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('rapot_santris', function (Blueprint $table) {
             $table->id();
-            $table->string('santri_id');
-            $table->string('academy_year');
-            $table->string('overall_score');
-            $table->text('streighs');
-            $table->text('weaknesses');
+            $table->string('santri_id')->nullable();
+            $table->string('academy_year')->nullable();
+            $table->string('overall_score')->nullable();
+            $table->text('strengths')->nullable();
+            $table->text('weaknesses')->nullable();
             $table->timestamps();
         });
     }

@@ -11,7 +11,7 @@ class activities extends Model
     use HasFactory;
     protected $fillable = [
         'activity_name',
-        'actifity_date',
+        'activity_date',
         'is_event',
         'description'
     ];

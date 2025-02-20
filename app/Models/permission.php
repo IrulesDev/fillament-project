@@ -11,8 +11,8 @@ class permission extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'reason',
+        'user_id',
         'status',
         'start_date',
         'end_date'

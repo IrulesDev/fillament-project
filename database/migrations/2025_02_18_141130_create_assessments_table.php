@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('assessments', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            // $table->foreignId('leason_id')->references('id')->on('leasons')->onDelete('cascade');
-            $table->decimal('score');
-            $table->text('evaluation');
-            $table->date('date');
+            $table->string('user_id')->nullable();
+            $table->unsignedBigInteger('lesson_id')->nullable();
+            $table->decimal('score')->nullable();
+            $table->text('evaluation')->nullable();
+            $table->date('date')->nullable();
             $table->timestamps();
         });
     }

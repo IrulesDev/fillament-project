@@ -17,8 +17,8 @@ class PermissionFactory extends Factory
     public function definition(): array
     {
         return [
-            // 'user_id',
             'reason' => fake()->text(),
+            // 'user_id',
             'status' => fake()->randomElement(['sudah kembali', 'belum kembali']),
             'start_date'=>fake()->date(),
             'end_date' =>fake()->date()

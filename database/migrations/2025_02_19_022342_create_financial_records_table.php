@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('financial_records', function (Blueprint $table) {
             $table->id();
-            $table->integer('accounting_id');
-            $table->string('categorry');
-            $table->text('description');
-            $table->string('transaction_type');
-            $table->decimal('amount');
-            $table->dateTime('transaction_date');
+            $table->string('accounting_id')->nullable();
+            $table->string('category')->nullable();
+            $table->text('description')->nullable();
+            $table->string('transaction_type')->nullable();
+            $table->decimal('amount')->nullable();
+            $table->dateTime('transaction_date')->nullable();
+            $table->timestamps();
         });
     }
 

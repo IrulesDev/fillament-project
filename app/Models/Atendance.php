@@ -12,8 +12,8 @@ class Atendance extends Model
 
     protected $fillable = [
         'santri_id',
-        'actifty_id',
-        'actifty',
+        'activity_id',
+        'activity',
         'status',
         'date'
     ];

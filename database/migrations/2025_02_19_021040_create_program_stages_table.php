@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('program_stages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->string('start_date');
-            $table->string('end_date');
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->string('start_date')->nullable();
+            $table->string('end_date')->nullable();
             $table->timestamps();
         });
     }

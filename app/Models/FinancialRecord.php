@@ -12,7 +12,7 @@ class FinancialRecord extends Model
 
     protected $fillable = [
         'accpunting_id',
-        'categorry',
+        'category',
         'description',
         'transaction_type',
         'amount',

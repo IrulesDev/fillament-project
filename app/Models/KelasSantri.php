@@ -12,7 +12,7 @@ class KelasSantri extends Model
 
     protected $fillable = [
         'major',
-        'mentor'
+        'mentor_id'
     ];
 
     public function mentor(){

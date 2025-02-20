@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('atendances', function (Blueprint $table) {
             $table->id();
-            $table->integer('santri_id');
-            $table->integer('actifty_id');
-            $table->string('actifty');
-            $table->string('status');
-            $table->dateTime('date');
+            $table->string('santri_id')->nullable();
+            $table->unsignedBigInteger('activity_id')->nullable();
+            $table->string('activity')->nullable();
+            $table->string('status')->nullable();
+            $table->dateTime('date')->nullable();
+            $table->timestamps();
         });
     }
 
