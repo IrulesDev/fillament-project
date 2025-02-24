@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\activities;
-use App\Models\assessment;
+use App\Models\Activities;
+use App\Models\Assessment;
 use App\Models\Atendance;
-use App\Models\attachment;
+use App\Models\Attachment;
 use App\Models\AttachmentSantri;
 use App\Models\Departement;
 use App\Models\FinancialRecord;
 use App\Models\KelasSantri;
 use App\Models\Leason;
-use App\Models\news;
+use App\Models\News;
 use App\Models\Permission;
 use App\Models\ProgramStage;
 use App\Models\RapotSantri;
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         $userData = user::factory(100)->create();
         $departementData = Departement::factory(100)->create();
         $permissionData = Permission::factory(100)->create();
-        $assessmentData = assessment::factory(10)->create();
+        $assessmentData = Assessment::factory(10)->create();
         $rapot_santriData = RapotSantri::factory(100)->create();
         $leasonData = Leason::factory(10)->create();
         $santri_familyData = SantriFamily::factory(10)->create();
