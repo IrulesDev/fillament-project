@@ -7,6 +7,7 @@ use App\Models\Assessment;
 use App\Models\Atendance;
 use App\Models\Attachment;
 use App\Models\AttachmentSantri;
+use App\Models\Classpit;
 use App\Models\Departement;
 use App\Models\FinancialRecord;
 use App\Models\KelasSantri;
