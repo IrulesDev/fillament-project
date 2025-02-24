@@ -7,12 +7,12 @@ use App\Models\assessment;
 use App\Models\Atendance;
 use App\Models\attachment;
 use App\Models\AttachmentSantri;
-use App\Models\departement;
+use App\Models\Departement;
 use App\Models\FinancialRecord;
 use App\Models\KelasSantri;
 use App\Models\Leason;
 use App\Models\news;
-use App\Models\permission;
+use App\Models\Permission;
 use App\Models\ProgramStage;
 use App\Models\RapotSantri;
 use App\Models\SantriFamily;
@@ -30,24 +30,24 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $program_stageData = ProgramStage::factory(10)->create();
         $kelasData = KelasSantri::factory(10)->create();
-        $userData = user::factory(1000)->create();
-        $departementData = departement::factory(100)->create();
-        $permissionData = permission::factory(100)->create();
+        $userData = user::factory(100)->create();
+        $departementData = Departement::factory(100)->create();
+        $permissionData = Permission::factory(100)->create();
         $assessmentData = assessment::factory(10)->create();
         $rapot_santriData = RapotSantri::factory(100)->create();
         $leasonData = Leason::factory(10)->create();
         $santri_familyData = SantriFamily::factory(10)->create();
-        $attachmentData = attachment::factory(10)->create();
+        $attachmentData = Attachment::factory(10)->create();
         $financial_recordData = FinancialRecord::factory(10)->create();
         $attendaceData = Atendance::factory(10)->create();
-        $activiesData = activities::factory(10)->create();
-        $newsData = news::factory(10)->create();
+        $activiesData = Activities::factory(10)->create();
+        $newsData = News::factory(10)->create();
         $attachment_santriData = AttachmentSantri::factory(10)->create();
 
         foreach($userData as $data){
             $data->update([
                 'kelas_id' => KelasSantri::all()->random()->id,
-                'departement_id' => departement::all()->random()->id,
+                'departement_id' => Departement::all()->random()->id,
                 'program_stage_id' => ProgramStage::all()->random()->id
             ]);
         }
