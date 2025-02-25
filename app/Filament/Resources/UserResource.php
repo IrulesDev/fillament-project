@@ -12,13 +12,17 @@ use App\Models\Kelas;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Departement;
+use App\Models\KelasSantri;
 use Faker\Provider\ar_EG\Text;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Support\Facades\Date;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -27,9 +31,12 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Forms\Components\ClasspitIdSelect;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Filters\TernaryFilter;
-use App\Forms\Components\DepartmentIdSelect;
+use App\Forms\Components\DepartementIdSelect;
 use Filament\Forms\Components\ToggleButtons;
+use App\Forms\Components\KelasSantriIdSelect;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\UserResource\Pages;
 use App\Forms\Components\ProgramStageIdSelect;
@@ -37,12 +44,10 @@ use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Split as ComponentsSplit;
 use App\Filament\Resources\UserResource\RelationManagers;
-use App\Forms\Components\ClasspitIdSelect;
-use App\Forms\Components\KelasSantriIdSelect;
-use App\Models\KelasSantri;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Wizard\Step;
+use Faker\Core\Color;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+use Filament\Support\Enums\IconPosition;
 
 class UserResource extends Resource
 {
@@ -55,265 +60,266 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            Wizard::make([
-                Wizard\Step::make('Data Santri')
-                    ->icon('heroicon-o-clipboard-document-list')
-                    ->completedIcon('heroicon-m-clipboard-document-check')
-                    ->columns(4)
-                    ->schema([
-                        Section::make()
-                            ->description('Santri Information')
-                            ->schema([
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])->schema([
-                                    ToggleButtons::make('gender')
-                                        ->inline()
-                                        ->columnSpanFull()
-                                        ->grouped()
-                                        ->options([
-                                            'pria' => 'Laki-laki',
-                                            'wanita' => 'Perempuan',
-                                        ])
-                                        ->icons([
-                                            'pria' => 'heroicon-o-user',
-                                            'wanita' => 'heroicon-o-user-circle',
-                                        ])
+            ->schema([
+                Wizard::make([
+                    Wizard\Step::make('Data Santri')
+                        ->icon('heroicon-o-clipboard-document-list')
+                        ->completedIcon('heroicon-m-clipboard-document-check')
+                        ->columns(4)
+                        ->schema([
+                            Section::make()
+                                ->description('Santri Information')
+                                ->schema([
+                                    Grid::make([
+                                        'md' => 1,
+                                        'lg' => 2,
+                                        'xl' => 4,
+                                    ])->schema([
+                                        ToggleButtons::make('gender')
+                                            ->inline()
+                                            ->columnSpanFull()
+                                            ->grouped()
+                                            ->options([
+                                                'pria' => 'Laki-laki',
+                                                'wanita' => 'Perempuan',
+                                            ])
+                                            ->icons([
+                                                'pria' => 'heroicon-o-user',
+                                                'wanita' => 'heroicon-o-user-circle',
+                                            ])
 
-                                        ->colors([
-                                            'pria' => 'primary',
-                                            'wanita' => 'primary',
+                                            ->colors([
+                                                'pria' => 'primary',
+                                                'wanita' => 'primary',
+                                            ]),
+                                        TextInput::make('name')
+                                            ->placeholder('Enter your Name')
+                                            ->reactive()
+                                            ->required()
+                                            ->prefixIcon('heroicon-o-user')
+                                            ->prefixIconColor('primary'),
+                                        TextInput::make('email')
+                                            ->email()
+                                            ->reactive()
+                                            ->required()
+                                            ->placeholder('Enter your Active Email')
+                                            ->prefixIcon('heroicon-o-envelope')
+                                            ->prefixIconColor('primary'),
+                                        TextInput::make('password')
+                                            ->placeholder('Password')
+                                            ->password()
+                                            ->required()
+                                            ->prefixIcon('heroicon-o-lock-closed')
+                                            ->prefixIconColor('primary'),
+                                        TextInput::make('phone')
+                                            ->placeholder('Enter your active WA number')
+                                            ->tel()
+                                            ->prefixIcon('heroicon-o-phone')
+                                            ->prefixIconColor('primary'),
+                                    ]),
+
+
+
+                                    Grid::make([
+                                        'md' => 1,
+                                        'lg' => 2,
+                                        'xl' => 4,
+                                    ])
+                                        ->schema([
+
+                                            TextInput::make('nisn')
+                                                ->numeric()
+                                                ->columnSpan(1)
+                                                ->placeholder('Masukan No NISN sekolah mu')
+                                                ->label('NISN')
+                                                ->prefixIcon('heroicon-o-credit-card')
+                                                ->prefixIconColor('primary'),
+                                            TextInput::make('no_ktp')
+                                                ->numeric()
+                                                ->columnSpan(1)
+                                                ->placeholder('Masukan No NIK KTP')
+                                                ->label('NIK')
+                                                ->prefixIcon('heroicon-o-credit-card')
+                                                ->prefixIconColor('primary'),
+
+
+                                            DatePicker::make('date_of_birth')
+                                                ->date()
+                                                ->placeholder('Enter your birth date')
+                                                ->native(false)
+                                                ->prefixIcon('heroicon-o-cake')
+                                                ->prefixIconColor('primary'),
+                                            Select::make('role')
+                                                ->placeholder('Pilih role kamu')
+                                                ->options([
+                                                    'Admin' => 'Admin',
+                                                    'Santri' => 'Santri',
+                                                    'Mentor' => 'Mentor',
+                                                    'Leader' => 'Leader',
+                                                ])
+                                                ->prefixIcon('heroicon-o-tag')
+                                                ->prefixIconColor('primary'),
+
                                         ]),
-                                    TextInput::make('name')
-                                        ->placeholder('Enter your Name')
-                                        ->reactive()
-                                        ->required()
-                                        ->prefixIcon('heroicon-o-user')
-                                        ->prefixIconColor('primary'),
-                                    TextInput::make('email')
-                                        ->email()
-                                        ->reactive()
-                                        ->required()
-                                        ->placeholder('Enter your Active Email')
-                                        ->prefixIcon('heroicon-o-envelope')
-                                        ->prefixIconColor('primary'),
-                                    TextInput::make('password')
-                                        ->placeholder('Password')
-                                        ->password()
-                                        ->required()
-                                        ->prefixIcon('heroicon-o-lock-closed')
-                                        ->prefixIconColor('primary'),
-                                    TextInput::make('phone')
-                                        ->placeholder('Enter your active WA number')
-                                        ->tel()
-                                        ->prefixIcon('heroicon-o-phone')
-                                        ->prefixIconColor('primary'),
+
+                                    Grid::make([
+                                        'md' => 1,
+                                        'lg' => 2,
+                                        'xl' => 4,
+                                    ])
+                                        ->schema([
+                                            TextInput::make('generation')
+                                                ->numeric()
+                                                ->placeholder('Which generation are you in?')
+                                                ->prefixIcon('heroicon-o-academic-cap')
+                                                ->prefixIconColor('primary'),
+
+                                            KelassantriIdSelect::make('kelas_id'),
+                                            DepartementIdSelect::make('departement_id'),
+                                            ProgramStageIdSelect::make('program_stage_id'),
+
+                                        ]),
+
+                                    Grid::make([
+                                        'md' => 1,
+                                        'lg' => 2,
+                                        'xl' => 4,
+                                    ])
+                                        ->schema([
+                                            Select::make('status_graduate')
+                                                ->native(false)
+                                                ->options([
+                                                    'Lulus' => 'Lulus',
+                                                    'Belum Lulus' => 'Belum Lulus',
+                                                    'Dropout' => 'Dropout',
+
+                                                ])
+                                                ->prefixIcon('heroicon-o-academic-cap')
+                                                ->prefixIconColor('primary'),
+
+                                            DatePicker::make('entry_date')
+                                                ->label('Tanggal awal masuk pondok')
+                                                ->native(false)
+                                                ->prefixIcon('heroicon-o-calendar-date-range')
+                                                ->prefixIconColor('primary'),
+
+
+                                            DatePicker::make('graduate_date')
+                                                ->native(false)
+                                                ->label('Tanggal akihr keluar pondok')
+                                                ->prefixIcon('heroicon-o-calendar-days')
+                                                ->prefixIconColor('primary'),
+
+                                        ]),
+                                    Grid::make([
+                                        'md' => 1,
+                                        'lg' => 2,
+                                        'xl' => 4,
+                                    ])
+                                        ->schema([
+                                            Textarea::make('address')
+                                                ->columnSpan(3),
+                                        ])
                                 ]),
-
-
-
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-
-                                        TextInput::make('nisn')
-                                            ->numeric()
-                                            ->columnSpan(1)
-                                            ->placeholder('Masukan No NISN sekolah mu')
-                                            ->label('NISN')
-                                            ->prefixIcon('heroicon-o-credit-card')
-                                            ->prefixIconColor('primary'),
-                                        TextInput::make('no_ktp')
-                                            ->numeric()
-                                            ->columnSpan(1)
-                                            ->placeholder('Masukan No NIK KTP')
-                                            ->label('NIK')
-                                            ->prefixIcon('heroicon-o-credit-card')
-                                            ->prefixIconColor('primary'),
-
-
-                                        DatePicker::make('date_of_birth')
-                                            ->date()
-                                            ->placeholder('Enter your birth date')
-                                            ->native(false)
-                                            ->prefixIcon('heroicon-o-cake')
-                                            ->prefixIconColor('primary'),
-                                        Select::make('role')
-                                            ->placeholder('Pilih role kamu')
-                                            ->options([
-                                                'Admin' => 'Admin',
-                                                'Santri' => 'Santri',
-                                                'Mentor' => 'Mentor',
-                                                'Leader' => 'Leader',
-                                            ])
-                                            ->prefixIcon('heroicon-o-tag')
-                                            ->prefixIconColor('primary'),
-
-                                    ]),
-
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-                                        TextInput::make('generation')
-                                            ->numeric()
-                                            ->placeholder('Which generation are you in?')
-                                            ->prefixIcon('heroicon-o-academic-cap')
-                                            ->prefixIconColor('primary'),
-
-                                        KelassantriIdSelect::make('kelas_id'),
-                                        DepartmentIdSelect::make('departement_id'),
-                                        ProgramStageIdSelect::make('program_stage_id'),
-
-                                    ]),
-
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-                                        Select::make('status_graduate')
-                                            ->native(false)
-                                            ->options([
-                                                'Lulus' => 'Lulus',
-                                                'Belum Lulus' => 'Belum Lulus',
-                                                'Dropout' => 'Dropout',
-
-                                            ])
-                                            ->prefixIcon('heroicon-o-academic-cap')
-                                            ->prefixIconColor('primary'),
-
-                                        DatePicker::make('entry_date')
-                                            ->label('Tanggal awal masuk pondok')
-                                            ->native(false)
-                                            ->prefixIcon('heroicon-o-calendar-date-range')
-                                            ->prefixIconColor('primary'),
-
-
-                                        DatePicker::make('graduate_date')
-                                            ->native(false)
-                                            ->label('Tanggal akihr keluar pondok')
-                                            ->prefixIcon('heroicon-o-calendar-days')
-                                            ->prefixIconColor('primary'),
-
-                                    ]),
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-                                        Textarea::make('address')
-                                            ->columnSpan(3),
-                                    ])
-                            ]),
-                    ]),
-                Wizard\Step::make('Data Ortu Santri')
-                    ->icon('heroicon-o-clipboard-document-list')
-                    ->completedIcon('heroicon-m-clipboard-document-check')
-                    ->columns(4)
-                    ->schema([
-                        Grid::make()
-                            ->relationship('santri_family')
-                            ->schema([
-                        Section::make()
-                            ->description("Santri's Family Information")
-                            ->schema([
-                                TextInput::make('no_kk')
-                                    ->label('Nomor Kartu Keluarga')
-                                    ->placeholder('Enter Family Card Number')
-                                    ->prefixIcon('heroicon-o-identification')
-                                    ->prefixIconColor('primary'),
-
-
-                            ]),
-
-                        Section::make()
-                            ->description("Father Information")
-                            ->schema([
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-
-                                        TextInput::make('father_name')
-                                            ->label("Father's Name")
-                                            ->placeholder('Enter Father Name')
-                                            ->prefixIcon('heroicon-o-user')
-                                            ->prefixIconColor('primary'),
-                                        TextInput::make('father_job')
-                                            ->label("Father's Job")
-                                            ->placeholder('Enter Father Job')
-                                            ->prefixIcon('heroicon-o-briefcase')
-                                            ->prefixIconColor('primary'),
-                                        DatePicker::make('father_birth')
-                                            ->label("Father's Birth Date")
-                                            ->native(false)
-                                            ->prefixIcon('heroicon-o-calendar')
-                                            ->prefixIconColor('primary'),
-                                        TextInput::make('father_phone')
-                                            ->label("Father's Phone")
-                                            ->placeholder('Enter Father Phone Number')
-                                            ->tel()
-                                            ->prefixIcon('heroicon-o-phone')
-                                            ->prefixIconColor('primary'),
-
-                                    ])
-                            ]),
-
-                        Section::make()
-                            ->description("Mother Information")
-                            ->schema([
-                                Grid::make([
-                                    'md' => 1,
-                                    'lg' => 2,
-                                    'xl' => 4,
-                                ])
-                                    ->schema([
-                                        TextInput::make('mother_name')
-                                            ->label("Mother's Name")
-                                            ->placeholder('Enter Mother Name')
-                                            ->prefixIcon('heroicon-o-user')
-                                            ->prefixIconColor('primary'),
-                                        TextInput::make('mother_job')
-                                            ->label("Mother's Job")
-                                            ->placeholder('Enter Mother Job')
-                                            ->prefixIcon('heroicon-o-briefcase')
-                                            ->prefixIconColor('primary'),
-                                        DatePicker::make('mother_birth')
-                                            ->label("Mother's Birth Date")
-                                            ->native(false)
-                                            ->prefixIcon('heroicon-o-calendar')
-                                            ->prefixIconColor('primary'),
-                                        TextInput::make('mother_phone')
-                                            ->label("Mother's Phone")
-                                            ->placeholder('Enter Mother Phone Number')
-                                            ->tel()
-                                            ->prefixIcon('heroicon-o-phone')
-                                            ->prefixIconColor('primary')
-                                    ]),
-
-                            ])
                         ]),
-                    ]),
-            ])
-                // ->skippable()
-                ->columnSpanFull()
-                ->contained(false),
+                    Wizard\Step::make('Data Ortu Santri')
+                        ->icon('heroicon-o-clipboard-document-list')
+                        ->completedIcon('heroicon-m-clipboard-document-check')
+                        ->columns(4)
+                        ->schema([
+                            Grid::make()
+                                ->relationship('santri_family')
+                                ->schema([
+                                    Section::make()
+                                        ->description("Santri's Family Information")
+                                        ->schema([
+                                            TextInput::make('no_kk')
+                                                ->label('Nomor Kartu Keluarga')
+                                                ->placeholder('Enter Family Card Number')
+                                                ->prefixIcon('heroicon-o-identification')
+                                                ->prefixIconColor('primary'),
 
 
-        ]);
+                                        ]),
+
+                                    Section::make()
+                                        ->description("Father Information")
+                                        ->schema([
+                                            Grid::make([
+                                                'md' => 1,
+                                                'lg' => 2,
+                                                'xl' => 4,
+                                            ])
+                                                ->schema([
+
+                                                    TextInput::make('father_name')
+                                                        ->label("Father's Name")
+                                                        ->placeholder('Enter Father Name')
+                                                        ->prefixIcon('heroicon-o-user')
+                                                        ->prefixIconColor('primary'),
+                                                    TextInput::make('father_job')
+                                                        ->label("Father's Job")
+                                                        ->placeholder('Enter Father Job')
+                                                        ->prefixIcon('heroicon-o-briefcase')
+                                                        ->prefixIconColor('primary'),
+                                                    DatePicker::make('father_birth')
+                                                        ->label("Father's Birth Date")
+                                                        ->native(false)
+                                                        ->prefixIcon('heroicon-o-calendar')
+                                                        ->prefixIconColor('primary'),
+                                                    TextInput::make('father_phone')
+                                                        ->label("Father's Phone")
+                                                        ->placeholder('Enter Father Phone Number')
+                                                        ->tel()
+                                                        ->prefixIcon('heroicon-o-phone')
+                                                        ->prefixIconColor('primary'),
+
+                                                ])
+                                        ]),
+
+                                    Section::make()
+                                        ->description("Mother Information")
+                                        ->schema([
+                                            Grid::make([
+                                                'md' => 1,
+                                                'lg' => 2,
+                                                'xl' => 4,
+                                            ])
+                                                ->schema([
+                                                    TextInput::make('mother_name')
+                                                        ->label("Mother's Name")
+                                                        ->placeholder('Enter Mother Name')
+                                                        ->prefixIcon('heroicon-o-user')
+                                                        ->prefixIconColor('primary'),
+                                                    TextInput::make('mother_job')
+                                                        ->label("Mother's Job")
+                                                        ->placeholder('Enter Mother Job')
+                                                        ->prefixIcon('heroicon-o-briefcase')
+                                                        ->prefixIconColor('primary'),
+                                                    DatePicker::make('mother_birth')
+                                                        ->label("Mother's Birth Date")
+                                                        ->native(false)
+                                                        ->prefixIcon('heroicon-o-calendar')
+                                                        ->prefixIconColor('primary'),
+                                                    TextInput::make('mother_phone')
+                                                        ->label("Mother's Phone")
+                                                        ->placeholder('Enter Mother Phone Number')
+                                                        ->tel()
+                                                        ->prefixIcon('heroicon-o-phone')
+                                                        ->prefixIconColor('primary')
+                                                ]),
+
+                                        ])
+                                ]),
+                        ]),
+                ])
+                    // ->skippable()
+                    ->columnSpanFull()
+                    ->contained(false),
+                    // ->
+
+
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -347,7 +353,7 @@ class UserResource extends Resource
                         }
                     }),
 
-                TextColumn::make('department.name')
+                TextColumn::make('Departement.name')
                     ->label('Amanah Departement')
                     ->icon('heroicon-o-briefcase')
                     ->iconColor('primary')
@@ -355,7 +361,7 @@ class UserResource extends Resource
                         query: function (Builder $query, string $search): Builder {
                             $id = Departement::where('name', 'like', '%' . $search . '%')->first()->id ?? null;
                             if ($id) {
-                                return $query->where('department_id', 'like', '%' . $id . '%');
+                                return $query->where('departement_id', 'like', '%' . $id . '%');
                             }
                             return $query;
                         }
@@ -378,11 +384,11 @@ class UserResource extends Resource
                 TextColumn::make('entry_date')
                     ->sortable()
                     ->tooltip(function ($record) {
-                        return $record->entry_date . ' -> ' . $record->graduation_date;
+                        return $record->entry_date . ' -> ' . $record->graduate_date;
                     })
                     ->getStateUsing(function ($record) {
                         $tanggalMasuk = new DateTime($record->entry_date);
-                        $tanggalKeluar = new DateTime($record->graduation_date);
+                        $tanggalKeluar = new DateTime($record->graduate_date);
 
                         $totalBulan =
                             $tanggalMasuk->diff($tanggalKeluar)->m +
@@ -423,8 +429,8 @@ class UserResource extends Resource
                         'teacher' => 'teacher',
                         'student' => 'student',
                     ]),
-                SelectFilter::make('department_id')
-                    ->label("Department")
+                SelectFilter::make('departement_id')
+                    ->label("Departement")
                     ->searchable()
                     ->preload()
                     ->multiple()
@@ -466,15 +472,30 @@ class UserResource extends Resource
                                 $data['graduate_until'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('graduation_date', '<=', $date),
                             );
-                    })
+                    }),
+                Filter::make('gender')
+                    ->form([
+                        Forms\Components\CheckboxList::make('gender')
+                            ->options([
+                                'pria' => 'Laki-laki',
+                                'wanita' => 'Perempuan',
+                            ])
+                            ->columns(2)
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['gender'],
+                            fn(Builder $query, $gender): Builder => $query->whereIn('gender', $gender),
+                        );
+                    }),
             ])
             ->groups([
                 Group::make('entry_date')
                     ->label('Masa Santri')
                     ->date()
                     ->collapsible(),
-                Group::make('department.name')
-                    ->label('Department')
+                Group::make('departement.name')
+                    ->label('Departement')
                     ->collapsible(),
 
             ])
@@ -490,6 +511,115 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('name')
+                    ->label('name :')
+                    ->icon('heroicon-m-user')
+                    ->iconColor('sky')
+                    ->placeholder('empty'),
+                TextEntry::make('email')
+                    ->label('e-mail :')
+                    ->icon('heroicon-m-envelope')
+                    ->placeholder('empty')
+                    ->iconColor('sky'),
+                TextEntry::make('gender')
+                    ->placeholder('empty')
+                    ->label('gender :')
+                    ->icon(function ($record) {
+                        $role = $record->gender;
+                        if ($role == 'pria') {
+                            return 'heroicon-m-user-minus';
+                        }
+                        if ($role == 'wanita') {
+                            return 'heroicon-m-user-plus';
+                        }
+                    })
+                    ->iconColor('sky'),
+                TextEntry::make('nisn')
+                    ->placeholder('empty')
+                    ->label('nisn :')
+                    ->icon('heroicon-m-credit-card')
+                    ->iconColor('sky'),
+                TextEntry::make('no_ktp')
+                    ->placeholder('empty')
+                    ->label('no ktp :')
+                    ->icon('heroicon-m-identification')
+                    ->iconColor('sky'),
+                TextEntry::make('date_of_birth')
+                    ->placeholder('empty')
+                    ->label('tanggal lahir :')
+                    ->icon('heroicon-m-calendar-days')
+                    ->iconColor('sky'),
+                TextEntry::make('phone')
+                    ->placeholder('empty')
+                    ->label('nomer hp :')
+                    ->copyable()
+                    ->copyMessage('Copied!')
+                    ->copyMessageDuration(1500)
+                    ->icon('heroicon-m-phone-arrow-down-left', IconPosition::Before)
+                    ->iconColor('sky')
+                    ->Icon('heroicon-m-clipboard-document-check', IconPosition::After) 
+                    ->IconColor('sky'),
+                TextEntry::make('address')
+                    ->placeholder('empty')
+                    ->icon('heroicon-m-map-pin')
+                    ->iconColor('rose')
+                    ->label('alamat :'),
+                TextEntry::make('generation')
+                    ->placeholder('empty')
+                    ->label('genersi :')
+                    ->icon('heroicon-m-user-group')
+                    ->iconColor('sky'),
+                TextEntry::make('status_graduate')
+                    ->placeholder('empty')
+                    ->label('status :')
+                    ->badge()
+                    ->color(function ($record) {
+                        $role = $record->status_graduate;
+                        if ($role == 'lulus') {
+                            return 'success';
+                        }
+                        if ($role == 'DO') {
+                            return 'rose';
+                        }
+                        if ($role == 'tidak lulus') {
+                            return 'rose';
+                        }
+                    }),
+                TextEntry::make('entry_date')
+                    ->placeholder('empty')
+                    ->label('tahun masuk :'),
+                TextEntry::make('graduate_date')
+                    ->placeholder('empty')
+                    ->label('tahun keluar :'),
+                TextEntry::make('role')
+                    ->placeholder('empty')
+                    ->label('peran :')
+                    ->icon('heroicon-m-briefcase')
+                    ->iconColor('sky')
+                    ->badge()
+                    ->badge()
+                    ->color(function ($record) {
+                        $role = $record->role;
+                        if ($role == 'admin') {
+                            return 'success';
+                        }
+                        if ($role == 'santri') {
+                            return 'rose';
+                        }
+                        if ($role == 'mentor') {
+                            return 'sky';
+                        }
+                        if ($role == 'leader') {
+                            return 'fuchsia';
+                        }
+                    }),
             ]);
     }
 

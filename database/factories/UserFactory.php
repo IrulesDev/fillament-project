@@ -38,7 +38,7 @@ class UserFactory extends Factory
             'generation'=> fake()->numberBetween(1,10),
             'entry_date' => fake()->date(),
             'graduate_date' => fake()->date(),
-            'status_graduate' => fake()->randomElement(['graduated', 'not_gratduated']),
+            'status_graduate' => fake()->randomElement(['lulus', 'tidak lulus', 'DO']),
             'role' => fake()->randomElement(['admin', 'santri', 'mentor', 'leader']),
             // 'kelas_id',
             // 'department_id',

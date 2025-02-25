@@ -8,7 +8,7 @@ use Filament\Forms\Components\Select;
 
 
 
-class DepartmentIdSelect extends Select
+class DepartementIdSelect extends Select
 {
 
 
