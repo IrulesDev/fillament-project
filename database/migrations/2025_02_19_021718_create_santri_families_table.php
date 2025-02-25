@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('santri_families', function (Blueprint $table) {
             $table->id();
-            $table->string('santri_id')->nullable();
+            $table->string('user_id')->nullable();
             $table->string('no_kk')->nullable();
             $table->string('father_name')->nullable();
             $table->string('father_job')->nullable();

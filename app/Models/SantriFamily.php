@@ -11,15 +11,13 @@ class SantriFamily extends Model
     use HasFactory;
 
     protected $fillable = [
-        'santri_id',
+        'user_id',
         'no_kk',
         'father_name',
-        'father_job',
         'father_job',
         'father_birth',
         'father_phone',
         'mother_name',
-        'mother_job',
         'mother_job',
         'mother_birth',
         'mother_phone',

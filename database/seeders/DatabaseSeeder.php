@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
 
         foreach($santri_familyData as $data){
             $data->update([
-                'santri_id' => User::all()->random()->id,
+                'user_id' => User::all()->random()->id,
             ]);
         }
 

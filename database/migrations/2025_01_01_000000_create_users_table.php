@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('gender')->nullable();
             $table->string('nisn')->nullable();
+            $table->string('no_ktp')->nullable();            
             $table->unsignedBigInteger('kelas_id')->nullable();
             $table->unsignedBigInteger('departement_id')->nullable();
             $table->unsignedBigInteger('program_stage_id')->nullable();
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('generation')->nullable();
             $table->string('entry_date')->nullable();
-            $table->string('graduation_date')->nullable();
+            $table->string('graduate_date')->nullable();
             $table->string('status_graduate')->nullable();
             $table->string('role')->nullable();
             $table->string('email')->unique()->nullable();

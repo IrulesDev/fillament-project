@@ -15,6 +15,7 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -109,6 +110,37 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->defaultThemeMode(ThemeMode::Dark)
+            ->spa()
+            ->sidebarWidth('15rem')
+            ->maxContentWidth('15rem')
+            ->sidebarCollapsibleOnDesktop(true)
+            ->sidebarFullyCollapsibleOnDesktop(false)
+            ->brandName('IrulesDev.com')
+            ->brandLogo(asset('images/logo.png'))
+            ->darkModeBrandLogo(asset('images/logo.png'))
+            ->favicon(asset('images/logo.png'))
+            ->brandLogoHeight('3rem')
+
+            ->plugins([
+                EmailVerificationAlertPlugin::make()
+                    ->color('blue')
+                    ->persistClosedState()
+                    ->closable(true)
+                    ->placeholder(true)
+                    ->renderHookName('panels::body.start')
+                    // ->renderHookScopes([ListUsers::class])
+                    ->lazy(false)
+                    ->verifyUsing(function($user) {
+
+                    // $user->notify(new EmailVerificationPrompt);
+
+                      Notification::make()
+                      ->title(trans('filament-email-verification-alert::messages.verification.success'))
+                      ->success()
+                      ->send();
+                    }),
             ]);
     }
 }

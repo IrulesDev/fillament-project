@@ -50,6 +50,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'table';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -168,7 +170,7 @@ class UserResource extends Resource
                                             ->prefixIconColor('primary'),
 
                                         KelassantriIdSelect::make('kelas_id'),
-                                        DepartmentIdSelect::make('department_id'),
+                                        DepartmentIdSelect::make('departement_id'),
                                         ProgramStageIdSelect::make('program_stage_id'),
 
                                     ]),

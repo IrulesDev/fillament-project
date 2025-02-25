@@ -38,7 +38,7 @@ class User extends Authenticatable
         'graduate_date',
         'status_graduate',
         'kelas_id',
-        'department_id',
+        'departement_id',
         'education_stage_id',
         'password',
         'role',

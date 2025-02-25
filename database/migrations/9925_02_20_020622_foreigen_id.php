@@ -49,7 +49,7 @@ return new class extends Migration
         });
 
         schema::table('santri_families', function(Blueprint $table){
-            $table->foreign('santri_id')->after('id')->references('id')->on('users')->onDelete('cascade')->nullable();
+            $table->foreign('user_id')->after('id')->references('id')->on('users')->onDelete('cascade')->nullable();
         });
 
         Schema::table('financial_records', function(Blueprint $table){
