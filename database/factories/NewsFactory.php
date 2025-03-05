@@ -18,6 +18,7 @@ class NewsFactory extends Factory
     {
         return [
             // 'autor_id',
+            'gambar' => fake()->imageUrl(),
             'title' => fake()->text(),
             'content' => fake()->text()
         ];
