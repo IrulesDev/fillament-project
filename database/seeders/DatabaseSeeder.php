@@ -34,10 +34,10 @@ class DatabaseSeeder extends Seeder
         $userData = user::factory(100)->create();
         $departementData = Departement::factory(100)->create();
         $permissionData = Permission::factory(100)->create();
-        $assessmentData = Assessment::factory(10)->create();
+        $assessmentData = Assessment::factory(100)->create();
         $rapot_santriData = RapotSantri::factory(100)->create();
         $leasonData = Leason::factory(10)->create();
-        $santri_familyData = SantriFamily::factory(10)->create();
+        $santri_familyData = SantriFamily::factory(100)->create();
         $attachmentData = Attachment::factory(10)->create();
         $financial_recordData = FinancialRecord::factory(10)->create();
         $attendaceData = Atendance::factory(10)->create();
@@ -49,7 +49,8 @@ class DatabaseSeeder extends Seeder
             $data->update([
                 'kelas_id' => KelasSantri::all()->random()->id,
                 'departement_id' => Departement::all()->random()->id,
-                'program_stage_id' => ProgramStage::all()->random()->id
+                'program_stage_id' => ProgramStage::all()->random()->id,
+                // 'santri_family_id' => SantriFamily::all()->random()->id,
             ]);
         }
 

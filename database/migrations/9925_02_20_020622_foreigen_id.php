@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('kelas_id')->after('id')->references('id')->on('kelas_santris')->onDelete('set null')->nullable();
             $table->foreign('departement_id')->after('kelas_id')->references('id')->on('departements')->onDelete('set null')->nullable();
             $table->foreign('program_stage_id')->after('departement_id')->references('id')->on('program_stages')->onDelete('set null')->nullable();
+            // $table->foreign('santri_family_id')->after('program_stage_id')->references('id')->on('santri_families')->onDelete('set null')->nullable();
         });
 
         Schema::table('departements', function(Blueprint $table){

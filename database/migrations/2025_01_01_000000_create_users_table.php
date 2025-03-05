@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('kelas_id')->nullable();
             $table->unsignedBigInteger('departement_id')->nullable();
             $table->unsignedBigInteger('program_stage_id')->nullable();
+            // $table->unsignedBigInteger('santri_family_id')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();

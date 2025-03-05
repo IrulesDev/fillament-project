@@ -40,6 +40,7 @@ class User extends Authenticatable
         'kelas_id',
         'departement_id',
         'education_stage_id',
+        // 'santri_family_id',
         'password',
         'role',
     ];
@@ -113,7 +114,7 @@ class User extends Authenticatable
     }
 
     public function kelas_santri(){
-        return $this->hasOne(KelasSantri::class);
+        return $this->hasOne(KelasSantri::class, 'user_id');
     }
 
     public function news(){
@@ -121,11 +122,11 @@ class User extends Authenticatable
     }
 
     public function assessment(){
-        return $this->hasMany(assessment::class);
+        return $this->hasMany(Assessment::class, 'user_id');
     }
 
-    public function santri_family(){
-        return $this->hasOne(SantriFamily::class);
+    public function family(){
+        return $this->hasOne(SantriFamily::class, 'user_id');
     }
 
     public function kelas(){

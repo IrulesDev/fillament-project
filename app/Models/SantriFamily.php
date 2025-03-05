@@ -24,6 +24,6 @@ class SantriFamily extends Model
     ];
 
     public function santri(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

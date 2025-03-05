@@ -9,6 +9,7 @@ use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use App\Models\Kelas;
+use Faker\Core\Color;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Departement;
@@ -24,8 +25,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\Tabs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\IconPosition;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
@@ -34,8 +37,10 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Forms\Components\ClasspitIdSelect;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Filters\TernaryFilter;
-use App\Forms\Components\DepartementIdSelect;
+use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Infolists\Components\TextEntry;
+use App\Forms\Components\DepartementIdSelect;
 use App\Forms\Components\KelasSantriIdSelect;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\UserResource\Pages;
@@ -44,10 +49,8 @@ use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Split as ComponentsSplit;
 use App\Filament\Resources\UserResource\RelationManagers;
-use Faker\Core\Color;
-use Filament\Infolists\Components\TextEntry;
+use App\Models\SantriFamily;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
-use Filament\Support\Enums\IconPosition;
 
 class UserResource extends Resource
 {
@@ -228,7 +231,7 @@ class UserResource extends Resource
                         ->columns(4)
                         ->schema([
                             Grid::make()
-                                ->relationship('santri_family')
+                                ->relationship('family')
                                 ->schema([
                                     Section::make()
                                         ->description("Santri's Family Information")
@@ -316,7 +319,7 @@ class UserResource extends Resource
                     // ->skippable()
                     ->columnSpanFull()
                     ->contained(false),
-                    // ->
+                // ->
 
 
             ]);
@@ -426,8 +429,9 @@ class UserResource extends Resource
                     ->label("Role")
                     ->options([
                         'admin' => 'admin',
-                        'teacher' => 'teacher',
-                        'student' => 'student',
+                        'mentor' => 'mentor',
+                        'santri' => 'santri',
+                        'leader' => 'leader',
                     ]),
                 SelectFilter::make('departement_id')
                     ->label("Departement")
@@ -514,112 +518,192 @@ class UserResource extends Resource
             ]);
     }
 
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
+        // ->relationship('santri_family')
             ->schema([
-                TextEntry::make('name')
-                    ->label('name :')
-                    ->icon('heroicon-m-user')
-                    ->iconColor('sky')
-                    ->placeholder('empty'),
-                TextEntry::make('email')
-                    ->label('e-mail :')
-                    ->icon('heroicon-m-envelope')
-                    ->placeholder('empty')
-                    ->iconColor('sky'),
-                TextEntry::make('gender')
-                    ->placeholder('empty')
-                    ->label('gender :')
-                    ->icon(function ($record) {
-                        $role = $record->gender;
-                        if ($role == 'pria') {
-                            return 'heroicon-m-user-minus';
-                        }
-                        if ($role == 'wanita') {
-                            return 'heroicon-m-user-plus';
-                        }
-                    })
-                    ->iconColor('sky'),
-                TextEntry::make('nisn')
-                    ->placeholder('empty')
-                    ->label('nisn :')
-                    ->icon('heroicon-m-credit-card')
-                    ->iconColor('sky'),
-                TextEntry::make('no_ktp')
-                    ->placeholder('empty')
-                    ->label('no ktp :')
-                    ->icon('heroicon-m-identification')
-                    ->iconColor('sky'),
-                TextEntry::make('date_of_birth')
-                    ->placeholder('empty')
-                    ->label('tanggal lahir :')
-                    ->icon('heroicon-m-calendar-days')
-                    ->iconColor('sky'),
-                TextEntry::make('phone')
-                    ->placeholder('empty')
-                    ->label('nomer hp :')
-                    ->copyable()
-                    ->copyMessage('Copied!')
-                    ->copyMessageDuration(1500)
-                    ->icon('heroicon-m-phone-arrow-down-left', IconPosition::Before)
-                    ->iconColor('sky')
-                    ->Icon('heroicon-m-clipboard-document-check', IconPosition::After) 
-                    ->IconColor('sky'),
-                TextEntry::make('address')
-                    ->placeholder('empty')
-                    ->icon('heroicon-m-map-pin')
-                    ->iconColor('rose')
-                    ->label('alamat :'),
-                TextEntry::make('generation')
-                    ->placeholder('empty')
-                    ->label('genersi :')
-                    ->icon('heroicon-m-user-group')
-                    ->iconColor('sky'),
-                TextEntry::make('status_graduate')
-                    ->placeholder('empty')
-                    ->label('status :')
-                    ->badge()
-                    ->color(function ($record) {
-                        $role = $record->status_graduate;
-                        if ($role == 'lulus') {
-                            return 'success';
-                        }
-                        if ($role == 'DO') {
-                            return 'rose';
-                        }
-                        if ($role == 'tidak lulus') {
-                            return 'rose';
-                        }
-                    }),
-                TextEntry::make('entry_date')
-                    ->placeholder('empty')
-                    ->label('tahun masuk :'),
-                TextEntry::make('graduate_date')
-                    ->placeholder('empty')
-                    ->label('tahun keluar :'),
-                TextEntry::make('role')
-                    ->placeholder('empty')
-                    ->label('peran :')
-                    ->icon('heroicon-m-briefcase')
-                    ->iconColor('sky')
-                    ->badge()
-                    ->badge()
-                    ->color(function ($record) {
-                        $role = $record->role;
-                        if ($role == 'admin') {
-                            return 'success';
-                        }
-                        if ($role == 'santri') {
-                            return 'rose';
-                        }
-                        if ($role == 'mentor') {
-                            return 'sky';
-                        }
-                        if ($role == 'leader') {
-                            return 'fuchsia';
-                        }
-                    }),
+                Tabs::make('Tabs')
+                    ->columnSpan('full')
+                    ->label('Detail Santri')
+                    ->tabs([
+                        Tabs\Tab::make('Bio Data Pribadi')
+                            ->icon('heroicon-o-user-circle')
+                            ->schema([
+                                // Columns::make(2)
+                                // ->schema([
+                                TextEntry::make('name')
+                                    ->label('name :')
+                                    ->icon('heroicon-m-user')
+                                    ->iconColor('sky')
+                                    ->placeholder('empty'),
+                                TextEntry::make('email')
+                                    ->label('e-mail :')
+                                    ->icon('heroicon-m-envelope')
+                                    ->placeholder('empty')
+                                    ->iconColor('sky'),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('gender')
+                                    ->placeholder('empty')
+                                    ->label('gender :')
+                                    ->icon(function ($record) {
+                                        return $record->gender == 'pria' ? 'heroicon-m-user-minus' : 'heroicon-m-user-plus';
+                                    })
+                                    ->iconColor('sky'),
+                                TextEntry::make('nisn')
+                                    ->placeholder('empty')
+                                    ->label('nisn :')
+                                    ->icon('heroicon-m-credit-card')
+                                    ->iconColor('sky'),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('no_ktp')
+                                    ->placeholder('empty')
+                                    ->label('no ktp :')
+                                    ->icon('heroicon-m-identification')
+                                    ->iconColor('sky'),
+                                TextEntry::make('date_of_birth')
+                                    ->placeholder('empty')
+                                    ->label('tanggal lahir :')
+                                    ->icon('heroicon-m-calendar-days')
+                                    ->iconColor('sky'),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('phone')
+                                    ->placeholder('empty')
+                                    ->label('nomer hp :')
+                                    ->copyable()
+                                    ->copyMessage('Copied!')
+                                    ->copyMessageDuration(1500)
+                                    // ->icon('heroicon-m-phone-arrow-down-left', IconPosition::Before)
+                                    // ->iconColor('sky')
+                                    ->Icon('heroicon-m-clipboard-document-check')
+                                    ->IconColor('sky'),
+                                TextEntry::make('address')
+                                    ->placeholder('empty')
+                                    ->icon('heroicon-m-map-pin')
+                                    ->iconColor('rose')
+                                    ->label('alamat :'),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('generation')
+                                    ->placeholder('empty')
+                                    ->label('generasi :')
+                                    ->icon('heroicon-m-user-group')
+                                    ->iconColor('sky'),
+                                TextEntry::make('status_graduate')
+                                    ->placeholder('empty')
+                                    ->label('status :')
+                                    ->badge()
+                                    ->color(fn ($record) => match ($record->status_graduate) {
+                                        'lulus' => 'success',
+                                        'DO', 'tidak lulus' => 'rose',
+                                        default => 'gray',
+                                    }),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('entry_date')
+                                    ->placeholder('empty')
+                                    ->label('tahun masuk :'),
+                                TextEntry::make('graduate_date')
+                                    ->placeholder('empty')
+                                    ->label('tahun keluar :'),
+                                // ]),
+                                // Grid::make(2)
+                                // ->schema([
+                                TextEntry::make('role')
+                                    ->placeholder('empty')
+                                    ->label('peran :')
+                                    ->icon('heroicon-m-briefcase')
+                                    ->iconColor('sky')
+                                    ->badge()
+                                    ->color(fn ($record) => match ($record->role) {
+                                        'admin' => 'success',
+                                        'santri' => 'rose',
+                                        'mentor' => 'sky',
+                                        'leader' => 'fuchsia',
+                                        default => 'gray',
+                                    })
+                                // ]),
+                            ]),
+                        Tabs\Tab::make('Data Keluarga')
+                            ->icon('heroicon-o-user-group')
+                            ->schema([
+                                    TextEntry::make('family.father_name')
+                                        ->label('Nama Ayah :')
+                                        ->icon('heroicon-m-user')
+                                        ->iconColor('blue')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.father_job')
+                                        ->label('Pekerjaan Ayah :')
+                                        ->icon('heroicon-m-briefcase')
+                                        ->iconColor('blue')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.father_birth')
+                                        ->label('Tanggal Lahir Ayah :')
+                                        ->icon('heroicon-m-calendar-days')
+                                        ->iconColor('blue')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.father_phone')
+                                        ->label('Nomor HP Ayah :')
+                                        ->icon('heroicon-m-phone')
+                                        ->iconColor('blue')
+                                        ->placeholder('empty')
+                                        ->copyable(),
+                                        // ->Icon('heroicon-m-clipboard-document-check')
+                                        // ->IconColor('sky'),
+                                    TextEntry::make('family.mother_name')
+                                        ->label('Nama Ibu :')
+                                        ->icon('heroicon-m-user')
+                                        ->iconColor('pink')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.mother_job')
+                                        ->label('Pekerjaan Ibu :')
+                                        ->icon('heroicon-m-briefcase')
+                                        ->iconColor('pink')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.mother_birth')
+                                        ->label('Tanggal Lahir Ibu :')
+                                        ->icon('heroicon-m-calendar-days')
+                                        ->iconColor('pink')
+                                        ->placeholder('empty'),
+                                    TextEntry::make('family.mother_phone')
+                                        ->label('Nomor HP Ibu :')
+                                        ->icon('heroicon-m-phone')
+                                        ->iconColor('pink')
+                                        ->placeholder('empty')
+                                        ->copyable(),
+                                        // ->Icon('heroicon-m-clipboard-document-check')
+                                        // ->IconColor('pink'),
+                            ]),
+                                    
+                            Tabs\Tab::make('assessment')
+                            ->icon('heroicon-o-folder')
+                            ->schema([
+                                TextEntry::make('assessment.score')
+                                    ->label('Nilai :')
+                                    ->icon('heroicon-m-light-bulb')
+                                    ->iconColor('yellow')
+                                    ->placeholder('empty'),
+                                TextEntry::make('assessment.evaluation')
+                                    ->label('Evaluasi :')
+                                    ->icon('heroicon-m-chat-bubble-left-ellipsis')
+                                    ->iconColor('gray')
+                                    ->placeholder('empty'),
+                                TextEntry::make('assessment.date')
+                                    ->label('Tanggal Ujian:')
+                                    ->icon('heroicon-m-calendar')
+                                    ->iconColor('blue')
+                                    ->placeholder('empty'),
+                            ])
+                        ])
             ]);
     }
 
