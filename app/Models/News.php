@@ -17,6 +17,10 @@ class News extends Model
         'content'
     ];
 
+    protected $casts = [
+        'attachments' => 'array',
+    ];
+
     public function autor(){
         return $this->belongsTo(User::class);
     }

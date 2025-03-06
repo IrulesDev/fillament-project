@@ -16,10 +16,14 @@ class NewsFactory extends Factory
      */
     public function definition(): array
     {
+        $seed = fake()->unique()->uuid;
+        
+        $url = "https://picsum.photos/seed/$seed/200/300";
+
         return [
             // 'autor_id',
-            'gambar' => fake()->imageUrl(),
-            'title' => fake()->text(),
+            'title' => fake()->text(20),
+            'gambar' => $url,
             'content' => fake()->text()
         ];
     }
