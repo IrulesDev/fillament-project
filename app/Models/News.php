@@ -19,6 +19,7 @@ class News extends Model
 
     protected $casts = [
         'attachments' => 'array',
+        'gambar' => 'array'
     ];
 
     public function autor(){

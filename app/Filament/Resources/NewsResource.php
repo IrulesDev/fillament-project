@@ -11,9 +11,11 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Infolists\Components\Tabs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\NewsResource\Pages;
@@ -32,21 +34,23 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                
-            Forms\Components\TextInput::make('title')
-                ->required()
-                ->label('Title'),
-            Forms\Components\Textarea::make('content')
-                ->required()
-                ->label('Content'),
-            Forms\Components\FileUpload::make('gambar')
-                ->required(),
-            Forms\Components\TextInput::make('author')
-                ->default(auth()->user()->name)
-                ->required()
-                ->label('Author'),
+
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->label('Title'),
+                Forms\Components\Textarea::make('content')
+                    ->required()
+                    ->label('Content'),
+                Forms\Components\FileUpload::make('gambar')
+                    ->required()
+                    ->storeFileNamesIn('gambar')
+                    ->multiple(),
+                Forms\Components\TextInput::make('author')
+                    ->default(auth()->user()->name)
+                    ->required()
+                    ->label('Author'),
             ]);
-        }
+    }
 
     public static function table(Table $table): Table
     {
@@ -54,7 +58,7 @@ class NewsResource extends Resource
             ->columns([
                 TextColumn::make('title')
                     ->searchable()
-                    ->description(fn(News $record):  string => Str::limit($record->content, 50, '...'))
+                    ->description(fn(News $record): string => Str::limit($record->content, 50, '...'))
                     ->sortable(),
                 ImageColumn::make('gambar')
                     ->searchable()
@@ -65,28 +69,38 @@ class NewsResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
-    
+  
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
-                TextEntry::make('title')
-                    ->label('Title'),
-                TextEntry::make('content')
-                    ->label('Content'),
-                ImageEntry::make('gambar')
-                    ->label('Gambar'),
-                TextEntry::make('author')
-                    ->label('Author'),
-        ]);
+                Tabs::make('Tabs')
+                    ->columnSpan('full')
+                    ->label('News')
+                    ->tabs([
+                        Tabs\Tab::make('Bio Data Pribadi')
+                            ->icon('heroicon-o-user-circle')
+                            ->schema([
+                                TextEntry::make('title')
+                                    ->label('Title'),
+                                TextEntry::make('content')
+                                    ->label('Content'),
+                                ImageEntry::make('gambar')
+                                    ->label('Gambar'),
+                                TextEntry::make('autor.name')
+                                    ->label('Author'),
+                            ]),
+                    ]),
+            ]);
     }
 
     public static function getRelations(): array

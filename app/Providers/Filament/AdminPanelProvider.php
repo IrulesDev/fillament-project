@@ -35,28 +35,6 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->profile()
-            // ->plugins([
-            //     EmailVerificationAlertPlugin::make(),
-            // ])
-            // ->plugins([
-            //     EmailVerificationAlertPlugin::make()
-            //         ->color('blue')
-            //         ->persistClosedState()
-            //         ->closable(true)
-            //         ->placeholder(true)
-            //         ->renderHookName('panels::body.start')
-            //         ->renderHookScopes([ListUsers::class])
-            //         ->lazy(false)
-            //         ->verifyUsing(function($user) {
-            //          // Custom verification logic
-            //           $user->notify(new CustomVerificationNotivication());
-     
-            //         Notification::make()
-            //           ->title(trans('filament-email-verification-alert::messages.verification.success'))
-            //           ->success()
-            //           ->send();
-            //         }),
-            // ])
             ->colors([
                 'danger' => Color::Rose,
                 'gray' => Color::Gray,
