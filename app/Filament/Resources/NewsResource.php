@@ -64,6 +64,7 @@ class NewsResource extends Resource
                     ->searchable()
                     ->sortable(),
             ])
+            ->emptyStateHeading('tidak ada berita')
             ->filters([
                 //
             ])

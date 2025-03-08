@@ -34,6 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->emailVerification()
+            ->brandLogo("images/IrulesDevLogo.png")
             ->profile()
             ->colors([
                 'danger' => Color::Rose,
@@ -95,10 +96,11 @@ class AdminPanelProvider extends PanelProvider
             ->maxContentWidth('15rem')
             ->sidebarCollapsibleOnDesktop(true)
             ->sidebarFullyCollapsibleOnDesktop(false)
+            ->brandLogo(asset('images/IrulesDevLogo.png'))
+            // ->default(asset('images/IrulesDevLogo.png'))
+            ->darkModeBrandLogo(asset('images/IrulesDevLogo.png'))
             ->brandName('IrulesDev.com')
-            ->brandLogo(asset('images/logo.png'))
-            ->darkModeBrandLogo(asset('images/logo.png'))
-            ->favicon(asset('images/logo.png'))
+            ->favicon(asset('images/IrulesDevLogo.png'))
             ->brandLogoHeight('3rem')
 
             ->plugins([
