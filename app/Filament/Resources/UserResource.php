@@ -10,10 +10,12 @@ use App\Models\User;
 use Filament\Tables;
 use App\Models\Kelas;
 use Faker\Core\Color;
+use App\Mail\RapotMail;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Departement;
 use App\Models\KelasSantri;
+use App\Models\SantriFamily;
 use Faker\Provider\ar_EG\Text;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
@@ -21,6 +23,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
@@ -28,6 +31,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\Tabs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconPosition;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\Layout\Split;
@@ -49,7 +53,6 @@ use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Split as ComponentsSplit;
 use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\SantriFamily;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
 
 class UserResource extends Resource
@@ -509,8 +512,30 @@ class UserResource extends Resource
                     Tables\Actions\EditAction::make()->tooltip('Edit'),
                     Tables\Actions\ViewAction::make()->tooltip('View'),
                     Tables\Actions\DeleteAction::make()->tooltip('Delete'),
+                    Tables\Actions\Action::make('sendRapot')->tooltip('send Rapot')
+                    ->action(function (User $record) {
+                        // Ambil data rapot dari record atau proses lainnya
+                        $rapotData = [
+                                'academy_year'  => $record->academy_year,
+                                'overall_score' => $record->overall_score,
+                                'strengths'     => $record->strengths,
+                                'weaknesses'    => $record->weaknesses,                         
+                        ];
+    
+                        // Mengirim email menggunakan mailer alternatif
+                        Mail::mailer('smtp')->to($record->email)->send(new RapotMail($rapotData));
+    
+                        // Menampilkan notifikasi sukses di Filament
+                        Notification::make()
+                            ->title('Email rapot berhasil dikirim!')
+                            ->success()
+                            ->send();
+                    })
+                    ->requiresConfirmation() ,
+
                 ])
             ])
+            // ->icon('heroicon-o-envelope')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

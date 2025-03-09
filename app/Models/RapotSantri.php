@@ -14,7 +14,7 @@ class RapotSantri extends Model
         'santri_id',
         'academy_year',
         'overall_score',
-        'streighs',
+        'strengths',
         'weaknesses'
     ];
 

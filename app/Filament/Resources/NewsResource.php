@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Infolists\Components\Tabs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
@@ -56,13 +57,21 @@ class NewsResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->searchable()
-                    ->description(fn(News $record): string => Str::limit($record->content, 50, '...'))
-                    ->sortable(),
-                ImageColumn::make('gambar')
-                    ->searchable()
-                    ->sortable(),
+                Stack::make([
+                    TextColumn::make('title')
+                        ->searchable()
+                        ->description(fn(News $record): string => Str::limit($record->content, 50, '...'))
+                        ->sortable(),
+                    ImageColumn::make('gambar')
+                        ->searchable()
+                        ->sortable(),
+                    TextColumn::make('author')
+                        ->searchable()
+                        ->sortable(),
+                ]),
+            ])->contentGrid([
+                'md' => 2,
+                'xl' => 2,
             ])
             ->emptyStateHeading('tidak ada berita')
             ->filters([
@@ -75,11 +84,11 @@ class NewsResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
-  
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
