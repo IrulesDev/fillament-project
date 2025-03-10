@@ -16,11 +16,11 @@ class Leason extends Model
         'description'
     ];
 
+    public function kelas_santri(){
+        return $this->belongsTo(KelasSantri::class, 'kelas_santri_id');
+    }
     public function assesment(){
         return $this->hasMany(assessment::class);
     }
 
-    public function kelas_santri(){
-        return $this->belongsTo(KelasSantri::class);
-    }
 }

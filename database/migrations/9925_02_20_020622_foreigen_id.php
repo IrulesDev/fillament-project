@@ -42,7 +42,7 @@ return new class extends Migration
         });
 
         Schema::table('leasons', function(Blueprint $table){
-            $table->foreign('kelas_santri_id')->after('id')->references('id')->on('leasons')->onDelete('set null')->nullable();
+            $table->foreign('kelas_santri_id')->after('id')->references('id')->on('kelas_santris')->onDelete('set null')->nullable();
         });
 
         Schema::table('kelas_santris', function(Blueprint $table){

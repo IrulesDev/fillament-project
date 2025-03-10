@@ -23,6 +23,6 @@ class Assessment extends Model
     }
 
     public function lessons(){
-        return $this->belongsTo(Leason::class);
+        return $this->belongsTo(Leason::class, 'lesson_id');
     }
 }

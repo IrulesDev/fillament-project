@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         $permissionData = Permission::factory(100)->create();
         $assessmentData = Assessment::factory(100)->create();
         $rapot_santriData = RapotSantri::factory(100)->create();
-        $leasonData = Leason::factory(10)->create();
+        $leasonData = Leason::factory(100)->create();
         $santri_familyData = SantriFamily::factory(100)->create();
         $attachmentData = Attachment::factory(10)->create();
         $financial_recordData = FinancialRecord::factory(10)->create();
@@ -57,6 +57,7 @@ class DatabaseSeeder extends Seeder
         foreach($kelasData as $data){
             $data->update([
                 'mentor_id' => User::all()->random()->id,
+                
             ]);
         }
 
