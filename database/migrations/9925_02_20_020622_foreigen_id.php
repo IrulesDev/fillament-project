@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::table('assessments', function (Blueprint $table){
             $table->foreign('user_id')->after('id')->references('id')->on('users')->onDelete('set null')->nullable();
-            $table->foreign('lesson_id')->after('user_id')->references('id')->on('assessments')->onDelete('set null')->nullable();
+            $table->foreign('lesson_id')->after('user_id')->references('id')->on('leasons')->onDelete('set null')->nullable();
         });
 
         Schema::table('rapot_santris', function(Blueprint $table){

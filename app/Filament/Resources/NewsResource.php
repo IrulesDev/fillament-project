@@ -11,13 +11,16 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Tabs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\NewsResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -60,15 +63,22 @@ class NewsResource extends Resource
                 Stack::make([
                     TextColumn::make('title')
                         ->searchable()
-                        ->description(fn(News $record): string => Str::limit($record->content, 50, '...'))
+                        ->description(fn(News $record) => collect(str_split($record->content, 10))->join("\n"))
                         ->sortable(),
-                    ImageColumn::make('gambar')
+                    TextColumn::make('autor.name')
                         ->searchable()
                         ->sortable(),
-                    TextColumn::make('author')
-                        ->searchable()
-                        ->sortable(),
+                ])->extraAttributes([
+                    'class' => 'space-y-1', // memberi jarak vertikal antar-elemen
                 ]),
+
+                ImageColumn::make('gambar')
+                    ->searchable()
+                    ->sortable()
+                    ->width('200px')
+                    ->alignRight()
+                    ->height('300px'),
+
             ])->contentGrid([
                 'md' => 2,
                 'xl' => 2,
@@ -89,29 +99,46 @@ class NewsResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                Tabs::make('Tabs')
-                    ->columnSpan('full')
-                    ->label('News')
-                    ->tabs([
-                        Tabs\Tab::make('Bio Data Pribadi')
-                            ->icon('heroicon-o-user-circle')
-                            ->schema([
-                                TextEntry::make('title')
-                                    ->label('Title'),
-                                TextEntry::make('content')
-                                    ->label('Content'),
-                                ImageEntry::make('gambar')
-                                    ->label('Gambar'),
-                                TextEntry::make('autor.name')
-                                    ->label('Author'),
-                            ]),
-                    ]),
-            ]);
-    }
+
+
+public static function infolist(Infolist $infolist): Infolist
+{
+    return $infolist
+        ->schema([
+            Tabs::make('News Categories')
+                ->tabs([
+                    Tabs\Tab::make('Latest News')
+                        ->icon('heroicon-o-newspaper')
+                        ->schema([
+                            Section::make('Main Details')
+                                ->schema([
+                                    Grid::make(2)
+                                        ->schema([
+                                            TextEntry::make('title')
+                                                ->label('Title')
+                                                ->columnSpan(2),
+                                            ImageEntry::make('gambar')
+                                                ->label('Image')
+                                                ->columnSpan(1)
+                                                ->height('300px')
+                                                ->width('200px'),
+                                            TextEntry::make('autor.name')
+                                                ->label('Author')
+                                                ->columnSpan(1),
+                                        ]),
+                                ]),
+                            Section::make('Content')
+                                ->schema([
+                                    TextEntry::make('content')
+                                        ->label('Content')
+                                        ->columnSpan(2),
+                                ]),
+                        ]),
+                    // Tambahkan tab lain sesuai kebutuhan
+                ]),
+        ]);
+}
+
 
     public static function getRelations(): array
     {
