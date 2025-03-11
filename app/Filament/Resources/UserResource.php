@@ -53,7 +53,9 @@ use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Split as ComponentsSplit;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\RapotSantri;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
+use Illuminate\Support\Facades\Log;
 
 class UserResource extends Resource
 {
@@ -515,17 +517,19 @@ class UserResource extends Resource
                     Tables\Actions\Action::make('sendRapot')->tooltip('send Rapot')
                     ->action(function (User $record) {
                         // Ambil data rapot dari record atau proses lainnya
+                        $record = User::find($record->id);
+                        $rapotSantri = RapotSantri::where('santri_id', $record->id)->first();
                         $rapotData = [
-                                'academy_year'  => $record->academy_year,
-                                'overall_score' => $record->overall_score,
-                                'strengths'     => $record->strengths,
-                                'weaknesses'    => $record->weaknesses,                         
+                            'name'          => $record->name,
+                            'email'         => $record->email,
+                            'academy_year'  => $rapotSantri->academy_year ?? 'N/A',
+                            'overall_score' => $rapotSantri->overall_score ?? 'N/A',
+                            'strengths'     => $rapotSantri->strengths ?? 'Tidak ada data',
+                            'weaknesses'    => $rapotSantri->weaknesses ?? 'Tidak ada data',                        
                         ];
-    
-                        // Mengirim email menggunakan mailer alternatif
+                        // Log::info('data rapot santri' . var_dump($rapotData));
                         Mail::mailer('smtp')->to($record->email)->send(new RapotMail($rapotData));
-    
-                        // Menampilkan notifikasi sukses di Filament
+                        // Log::info('mail berhasil dikirim ke'. $record->email);
                         Notification::make()
                             ->title('Email rapot berhasil dikirim!')
                             ->success()

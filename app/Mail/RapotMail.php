@@ -4,27 +4,27 @@ namespace App\Mail;
 
 use App\Models\RapotSantri;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class RapotMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $rapotData; 
-
+    public $rapotData;
 
     /**
      * Create a new message instance.
      */
     public function __construct($rapotData)
     {
-        $rapotData = RapotSantri::all()  ;
-
-        return $rapotData;
+        $this->rapotData = $rapotData;
+        Log::info('Rapot data initialized:', $rapotData);
     }
 
     /**
@@ -44,7 +44,6 @@ class RapotMail extends Mailable
     {
         return new Content(
             markdown: 'emails.rapot',
-            
         );
     }
 
@@ -59,9 +58,9 @@ class RapotMail extends Mailable
     }
 
     public function build()
-{
-    return $this->subject('Laporan Rapot Siswa')
-                ->markdown('emails.rapot')
-                ->with(['rapotData' => $this->rapotData]);
-}
+    {
+        return $this->subject('Laporan Rapot Siswa')
+                    ->markdown('emails.rapot')
+                    ->with(['rapotData' => $this->rapotData]);
+    }
 }
