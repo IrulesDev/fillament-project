@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $program_stageData = ProgramStage::factory(10)->create();
-        $kelasData = KelasSantri::factory(10)->create();
+        $kelasData = KelasSantri::factory(3)->create();
         $userData = user::factory(100)->create();
         $departementData = Departement::factory(100)->create();
         $permissionData = Permission::factory(100)->create();

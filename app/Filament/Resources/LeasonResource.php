@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LeasonResource\Pages;
 use App\Filament\Resources\LeasonResource\RelationManagers;
+use App\Models\KelasSantri;
 use App\Models\Leason;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -32,9 +33,27 @@ class LeasonResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('kelas_santri.name')
-
+                TextColumn::make('name')
+                ->searchable()
+                ->label('Nama Pelajaran'),
+                TextColumn::make('kelas_santri.major')
+                ->searchable()
+                ->badge()
+                ->color(function ($record) {
+                    return match ($record->kelas_santri->major) {
+                        'programmer' => 'blue',
+                        'multimedia' => 'yellow',
+                        'marketer' => 'red',
+                        default => 'gray',
+                    };
+                }),
+                TextColumn::make('kelas_santri.mentor.name')
+                ->searchable()
+                ->icon('heroicon-o-user-group')
+                ->iconColor('primary'),
+                TextColumn::make('description')
+                ->limit(50)
+                ->label('Deskripsi'),
             ])
             ->filters([
                 //

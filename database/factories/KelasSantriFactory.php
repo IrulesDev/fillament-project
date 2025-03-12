@@ -17,7 +17,12 @@ class KelasSantriFactory extends Factory
     public function definition(): array
     {
         return [
-            'major' => fake()->jobTitle(),
+            'major' => fake()->unique()->randomElement([
+                'programmer',
+                'multimedia',
+                'marketer',
+            ]),
+
             // 'mentor_id'
         ];
     }

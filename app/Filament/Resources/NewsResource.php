@@ -51,7 +51,6 @@ class NewsResource extends Resource
                     ->multiple(),
                 Forms\Components\TextInput::make('author')
                     ->default(auth()->user()->name)
-                    ->required()
                     ->label('Author'),
             ]);
     }
