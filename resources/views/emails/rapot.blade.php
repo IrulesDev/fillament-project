@@ -1,4 +1,6 @@
 <x-mail::message>
+<img src="{{ asset('public/images/IrulesDevText.png') }}" alt="{{ config('app.name') }} Logo" style="width: 150px; height: auto;">
+
 # Laporan Rapot Siswa
 
 <div style="font-family: Arial, sans-serif; color: #333;">

@@ -54,6 +54,7 @@ class LeasonResource extends Resource
                 TextColumn::make('description')
                 ->limit(50)
                 ->label('Deskripsi'),
+                TextColumn::make('assesment.santri.name')
             ])
             ->filters([
                 //

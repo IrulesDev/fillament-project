@@ -20,7 +20,7 @@ class Leason extends Model
         return $this->belongsTo(KelasSantri::class, 'kelas_santri_id');
     }
     public function assesment(){
-        return $this->hasMany(Assessment::class);
+        return $this->hasMany(Assessment::class, 'lesson_id');
     }
 
 }

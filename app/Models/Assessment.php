@@ -19,7 +19,7 @@ class Assessment extends Model
     ];
 
     public function santri(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function lessons(){
