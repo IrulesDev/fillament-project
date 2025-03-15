@@ -18,10 +18,10 @@ class ViewTeacher extends ViewRecord
         ];
     }
     public function index()
-{
-    // Mengambil semua user yang memiliki role 'mentor'
-    $mentors = User::role('mentor')->get();
-    
-    return view('mentors.index', compact('mentors'));
-}
+    {
+        // Mengambil semua user yang memiliki role 'mentor'
+        $mentors = User::role('mentor')->get();
+
+        return view('mentors.index', compact('mentors'));
+    }
 }

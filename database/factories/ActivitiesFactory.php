@@ -17,7 +17,7 @@ class ActivitiesFactory extends Factory
     public function definition(): array
     {
         return [
-            'activity_name' => fake()->sentence(3),
+            'activity_name' => fake()->randomElement(''),
             'activity_date' => fake()->date(),
             'is_event' => fake()->boolean(),
             'description' => fake()->paragraph(),
