@@ -59,7 +59,7 @@ return new class extends Migration
 
         Schema::table('atendances', function (Blueprint $table){
             $table->foreign('santri_id')->after('id')->references('id')->on('users')->onDelete('set null')->nullable();
-            $table->foreign('activity_id')->after('santri_id')->references('id')->on('atendances')->onDelete('set null')->nullable();
+            $table->foreign('activity_id')->after('santri_id')->references('id')->on('activities')->onDelete('set null')->nullable();
         });
 
         Schema::table('news', function(Blueprint $table){

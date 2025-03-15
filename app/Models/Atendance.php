@@ -19,7 +19,7 @@ class Atendance extends Model
     ];
 
     public function activites(){
-        return $this->belongsTo(activities::class);
+        return $this->belongsTo(activities::class, 'activity_id');
     }
 
     public function santri(){

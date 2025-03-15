@@ -17,6 +17,6 @@ class Activities extends Model
     ];
 
     public function atendance(){
-        return $this->hasMany(Atendance::class);
+        return $this->hasMany(Atendance::class, 'activity_id');
     }
 }

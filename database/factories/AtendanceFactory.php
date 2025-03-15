@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Atendance;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +21,13 @@ class AtendanceFactory extends Factory
             // 'santri_id' => $this->faker->randomNumber(),
             // 'activity_id' => $this->faker->randomNumber(),
             'activity' => fake()->word(),
-            'status' => fake()->randomElement(['present', 'absent']),
+            'status' => fake()->randomElement([true, false]),
+            'keterangan' => function (array $attributes) {
+                if (empty($attributes['status']) || $attributes['status'] === false) {
+                    return '';
+                }
+                return fake()->randomElement(['sakit', 'alfa', 'izin']);
+            },
             'date' => fake()->date(),
         ];
     }
