@@ -19,6 +19,7 @@ class ActivitiesFactory extends Factory
         return [
             'activity_name' => fake()->randomElement(''),
             'activity_date' => fake()->date(),
+            'activity_time' => fake()->time(),
             'is_event' => fake()->boolean(),
             'description' => fake()->paragraph(),
         ];
